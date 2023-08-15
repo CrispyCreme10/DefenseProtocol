@@ -1,44 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using Sirenix.Utilities;
-using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Map Info")]
-public class MapInfo : SerializedScriptableObject {
-    [SerializeField] private string mapName;
-    [SerializeField] private int rows = 1;
-    [SerializeField] private int cols = 1;
-    [TableMatrix(DrawElementMethod = "DrawCell", HorizontalTitle = "Tower Placement Cells", SquareCells = true)]
-    [SerializeField]
-    private bool[,] _mapTurretPlacementCells;
+public class MapInfo : MonoBehaviour {
+    [SerializeField] private Vector2[] turretPoints;
+    [SerializeField] private Vector2[] pathPoints;
 
-    public bool[,] MapTurretPlacementCells => _mapTurretPlacementCells;
+    public Vector2[] PathPoints => pathPoints;
     
-    private static bool DrawCell(Rect rect, bool value) {
-        if (Event.current.type == EventType.MouseDown && rect.Contains(Event.current.mousePosition)) {
-            value = !value;
-            GUI.changed = true;
-            Event.current.Use();
+    private void OnDrawGizmos() {
+        foreach (var turretPoint in turretPoints) {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(turretPoint, new Vector3(1f, 1f, 0f));
         }
         
-        EditorGUI.DrawRect(
-            rect.Padding(1),
-            value ? new Color(0.1f, 0.8f, 0.2f)
-                : new Color(0.8f, 0.1f, 0.2f));
-
-        return value;
+        foreach (var pathPoint in pathPoints) {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(pathPoint, new Vector3(1f, 1f, 0f));
+        }
     }
-
-    // [OnInspectorInit]
-    // private void CreateData() {
-    //     Debug.Log($"{rows}, {cols}");
-    //     _mapTurretPlacementCells = new bool[cols, rows];
-    //     for (var x = 0; x < cols; x++) {
-    //         for (var y = 0; y < rows; y++) {
-    //             _mapTurretPlacementCells[x, y] = true;
-    //         }
-    //     }
-    // }
 }
