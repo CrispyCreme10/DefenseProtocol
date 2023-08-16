@@ -92,16 +92,25 @@ public class HudController : MonoBehaviour {
                         alignItems = Align.Center,
                         width = 100,
                         height = 100,
+                        backgroundColor = new Color(255, 0, 0, 0.2f),
+                        borderTopColor = new Color(255, 0, 0),
+                        borderRightColor = new Color(255, 0, 0),
+                        borderBottomColor = new Color(255, 0, 0),
+                        borderLeftColor = new Color(255, 0, 0),
+                        borderTopWidth = 2,
+                        borderRightWidth = 2,
+                        borderBottomWidth = 2,
+                        borderLeftWidth = 2,
                     }
                 };
-                
+
                 var dragImage = new Image {
                     name = "DragImage",
                     sprite = stackTower.TowerSprite,
                     style = {
                         width = 75, 
                         height = 75,
-                        opacity = 0.5f
+                        opacity = 0.75f
                     }
                 };
                 
