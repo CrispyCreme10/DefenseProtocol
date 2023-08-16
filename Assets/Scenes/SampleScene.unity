@@ -2532,6 +2532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e340c3a0c70c1504c82382d078937dc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneCamera: {fileID: 519420031}
   mapInfo: {fileID: 815635557}
   playerInfo: {fileID: 734597316}
 --- !u!1001 &7954625951747058400
@@ -2545,6 +2546,10 @@ PrefabInstance:
     - target: {fileID: 2434405984385235667, guid: e474b962efaaf6245ab4db9f0dacce01, type: 3}
       propertyPath: m_Name
       value: Ghost
+      objectReference: {fileID: 0}
+    - target: {fileID: 2434405984385235667, guid: e474b962efaaf6245ab4db9f0dacce01, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4191595123485680862, guid: e474b962efaaf6245ab4db9f0dacce01, type: 3}
       propertyPath: m_RootOrder
