@@ -102,14 +102,12 @@ public class HudController : MonoBehaviour {
 
     private void OnEnable() {
         PlayerInfo.OnTowersChange += UpdateTowers;
-        BattleManager.OnEndOfWave += EndOfWave;
         BattleManager.OnWaveChange += WaveChange;
         BattleManager.OnLivesChange += LivesChange;
     }
 
     private void OnDisable() {
         PlayerInfo.OnTowersChange -= UpdateTowers;
-        BattleManager.OnEndOfWave -= EndOfWave;
         BattleManager.OnWaveChange -= WaveChange;
         BattleManager.OnLivesChange -= LivesChange;
     }
@@ -229,11 +227,8 @@ public class HudController : MonoBehaviour {
         BuildBottomPanel();
     }
 
-    private void EndOfWave() {
-        _waveStartButton.style.display = DisplayStyle.Flex;
-    }
-
     private void WaveChange(int currentWave, int totalWaves) {
+        _waveStartButton.style.display = DisplayStyle.Flex;
         _wavesLabel.text = $"Wave: {currentWave} / {totalWaves}";
     }
 

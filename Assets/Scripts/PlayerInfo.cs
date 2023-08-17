@@ -7,6 +7,7 @@ public class PlayerInfo : MonoBehaviour {
     public static Action OnTowersChange;
     
     [SerializeField] private List<StackTower> towers;
+    [SerializeField] private int upgradePoints;
 
     private List<TowerController> _placedTowers;
     
@@ -40,4 +41,10 @@ public class StackTower {
     public void DecrementAmount() {
         amount--;
     }
+}
+
+[Serializable]
+public class Ability {
+    [SerializeField] private string abilityName;
+    [SerializeField] private float cooldown;
 }

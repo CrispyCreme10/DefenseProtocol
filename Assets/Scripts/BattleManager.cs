@@ -6,7 +6,6 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour {
-    public static Action OnEndOfWave;
     public static Action<int, int> OnWaveChange;
     public static Action<int> OnLivesChange;
     
@@ -74,16 +73,10 @@ public class BattleManager : MonoBehaviour {
         _playWave = true;
     }
 
-    private void IncrementWave() {
-        currentWave++;
-        OnWaveChange?.Invoke(currentWave + 1, waves.Count);
-    }
-
     private void SetupNextWave() {
         _playWave = false;
         _currentWaveEnemyIndex = 0;
         _destroyedEnemies.Clear();
-        IncrementWave();
     }
     
     public void MoveDestroyedEnemy(EnemyController enemyController) {
@@ -93,10 +86,12 @@ public class BattleManager : MonoBehaviour {
 
             if (_aliveEnemies.Count == 0) {
                 // end of wave
-                OnEndOfWave?.Invoke();
+                currentWave++;
                 // end of battle
                 if (currentWave == waves.Count) {
                     EndOfBattle(true);
+                } else {
+                    OnWaveChange?.Invoke(currentWave + 1, waves.Count);
                 }
             }
         }
@@ -116,7 +111,7 @@ public class BattleManager : MonoBehaviour {
         
         Debug.Log($"GAME OVER: {(playerWon ? "YOU WIN!" : "YOU LOSE")}");
         _battleComplete = true;
-        Time.timeScale = 0f;
+        // Time.timeScale = 0f;
     }
 }
 
