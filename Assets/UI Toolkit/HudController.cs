@@ -6,9 +6,6 @@ using UnityEngine.UIElements;
 
 public class HudController : MonoBehaviour {
     [SerializeField] private Camera sceneCamera;
-    [SerializeField] private BattleManager battleManager;
-    [SerializeField] private MapInfo mapInfo;
-    [SerializeField] private PlayerInfo playerInfo;
     
     private VisualElement _root;
     private Label _wavesLabel;
@@ -27,8 +24,8 @@ public class HudController : MonoBehaviour {
         // convert tower points to screen points
         const int spotSize = 100;
         _towerScreenElements = new List<VisualElement>();
-        for (var index = 0; index < mapInfo.TurretPoints.Length; index++) {
-            var turretPoint = mapInfo.TurretPoints[index];
+        for (var index = 0; index < Singleton.Instance.MapManager.TurretPoints.Length; index++) {
+            var turretPoint = Singleton.Instance.MapManager.TurretPoints[index];
             var turretPointScreenAdj = sceneCamera.WorldToScreenPoint(turretPoint);
             var top = Screen.height - turretPointScreenAdj.y - spotSize / 2f;
             var left = turretPointScreenAdj.x - spotSize / 2f;
@@ -93,7 +90,7 @@ public class HudController : MonoBehaviour {
             
             // spawn tower if applicable
             if (_chosenTowerIndex >= 0 && _chosenPointIndex >= 0) {
-                playerInfo.SpawnTower(_chosenTowerIndex, mapInfo.TurretPoints[_chosenPointIndex]);
+                Singleton.Instance.PlayerManager.SpawnTower(_chosenTowerIndex, Singleton.Instance.MapManager.TurretPoints[_chosenPointIndex]);
             }
         });
         
@@ -101,13 +98,13 @@ public class HudController : MonoBehaviour {
     }
 
     private void OnEnable() {
-        PlayerInfo.OnTowersChange += UpdateTowers;
+        PlayerManager.OnTowersChange += UpdateTowers;
         BattleManager.OnWaveChange += WaveChange;
         BattleManager.OnLivesChange += LivesChange;
     }
 
     private void OnDisable() {
-        PlayerInfo.OnTowersChange -= UpdateTowers;
+        PlayerManager.OnTowersChange -= UpdateTowers;
         BattleManager.OnWaveChange -= WaveChange;
         BattleManager.OnLivesChange -= LivesChange;
     }
@@ -118,15 +115,15 @@ public class HudController : MonoBehaviour {
         _livesLabel = _root.Q<Label>("Lives");
         _waveStartButton = _root.Q<Button>("StartWave");
         _waveStartButton.clicked += () => {
-            battleManager.StartWave();
+            Singleton.Instance.BattleManager.StartWave();
             _waveStartButton.style.display = DisplayStyle.None;
         };
         _bottomPanel = _root.Q("BottomPanel");
     }
 
     private void BuildBottomPanel() {
-        for (var index = 0; index < playerInfo.Towers.Count; index++) {
-            var stackTower = playerInfo.Towers[index];
+        for (var index = 0; index < Singleton.Instance.PlayerManager.Towers.Count; index++) {
+            var stackTower = Singleton.Instance.PlayerManager.Towers[index];
             var container = new VisualElement {
                 name = "TowerSlot",
                 style = {

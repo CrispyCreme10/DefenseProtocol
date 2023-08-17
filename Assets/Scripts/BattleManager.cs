@@ -9,8 +9,6 @@ public class BattleManager : MonoBehaviour {
     public static Action<int, int> OnWaveChange;
     public static Action<int> OnLivesChange;
     
-    [SerializeField]
-    private MapInfo mapInfo;
     [SerializeField] 
     private int totalPlayerLives;
     [SerializeField] 
@@ -50,8 +48,8 @@ public class BattleManager : MonoBehaviour {
                 // spawn enemies in current wave
                 var enemyWaveInfo = waves[currentWave].Enemies[_currentWaveEnemyIndex];
                 var enemy = Instantiate(enemyWaveInfo.EnemyController,
-                    mapInfo.PathPoints[0], Quaternion.identity);
-                enemy.Setup(mapInfo, this);
+                    Singleton.Instance.MapManager.PathPoints[0], Quaternion.identity);
+                enemy.Setup(Singleton.Instance.MapManager, this);
                 // for tracking purposes
                 _aliveEnemies.Add(enemy);
                 // update spawn count

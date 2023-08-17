@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapInfo : MonoBehaviour {
+public class MapManager : MonoBehaviour {
     [SerializeField] private Vector2[] turretPoints;
     [SerializeField] private Vector2[] pathPoints;
 

@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour {
 
     public float TotalDistance => moveSpeed * _timeAlive;
     
-    private MapInfo _mapInfo;
+    private MapManager _mapManager;
     private BattleManager _battleManager;
     private Rigidbody2D _rb;
     private int _currentPathPointIndex = 1;
@@ -45,11 +45,11 @@ public class EnemyController : MonoBehaviour {
     private void Move() {
         if (!_canMove) return;
         
-        var nextPoint = _mapInfo.PathPoints[_currentPathPointIndex];
+        var nextPoint = _mapManager.PathPoints[_currentPathPointIndex];
         var distance = Vector3.Distance(transform.position, nextPoint);
         if (distance <= 0.01) {
             _currentPathPointIndex++;
-            if (_currentPathPointIndex >= _mapInfo.PathPoints.Length) {
+            if (_currentPathPointIndex >= _mapManager.PathPoints.Length) {
                 // reached end of path
                 _battleManager.DecrementLives();
                 DestroySelf();
@@ -72,8 +72,8 @@ public class EnemyController : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    public void Setup(MapInfo mapInfo, BattleManager battleManager) {
-        _mapInfo = mapInfo;
+    public void Setup(MapManager mapManager, BattleManager battleManager) {
+        _mapManager = mapManager;
         _battleManager = battleManager;
     }
 }

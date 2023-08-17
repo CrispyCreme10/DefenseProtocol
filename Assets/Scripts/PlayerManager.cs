@@ -2,16 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class PlayerInfo : MonoBehaviour {
+public class PlayerManager : MonoBehaviour {
     public static Action OnTowersChange;
-    
+
+    [SerializeField] private List<AbilityX> abilities;
     [SerializeField] private List<StackTower> towers;
+    [SerializeField] private List<UtilityX> utilities;
     [SerializeField] private int upgradePoints;
 
     private List<TowerController> _placedTowers;
-    
+
+    public List<AbilityX> Abilities => abilities;
     public List<StackTower> Towers => towers;
+    public List<UtilityX> Utilities => utilities;
+    public int UpgradePoints => upgradePoints;
 
     private void Awake() {
         _placedTowers = new List<TowerController>();
@@ -43,8 +49,14 @@ public class StackTower {
     }
 }
 
-[Serializable]
-public class Ability {
-    [SerializeField] private string abilityName;
-    [SerializeField] private float cooldown;
+public enum TargetingType {
+    Freeform,
+    Enemy,
+    Tower,
+    Path
+}
+
+public enum TargetingMultiplicity {
+    Single,
+    Multiple
 }
