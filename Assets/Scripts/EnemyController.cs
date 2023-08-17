@@ -6,12 +6,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class EnemyController : MonoBehaviour {
-    [SerializeField] private MapInfo mapInfo;
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private int maxHealth = 10;
 
     public float TotalDistance => moveSpeed * _timeAlive;
     
+    private MapInfo _mapInfo;
+    private BattleManager _battleManager;
     private Rigidbody2D _rb;
     private int _currentPathPointIndex = 1;
     private bool _canMove = true;
@@ -44,12 +45,14 @@ public class EnemyController : MonoBehaviour {
     private void Move() {
         if (!_canMove) return;
         
-        var nextPoint = mapInfo.PathPoints[_currentPathPointIndex];
+        var nextPoint = _mapInfo.PathPoints[_currentPathPointIndex];
         var distance = Vector3.Distance(transform.position, nextPoint);
         if (distance <= 0.01) {
             _currentPathPointIndex++;
-            if (_currentPathPointIndex >= mapInfo.PathPoints.Length) {
-                Destroy(gameObject);
+            if (_currentPathPointIndex >= _mapInfo.PathPoints.Length) {
+                // reached end of path
+                _battleManager.DecrementLives();
+                DestroySelf();
             }
         } else {
             var dir = (new Vector3(nextPoint.x, nextPoint.y, 0f) - transform.position).normalized;
@@ -60,7 +63,17 @@ public class EnemyController : MonoBehaviour {
     private void TakeDamage(int damage) {
         _health -= damage;
         if (_health <= 0) {
-            Destroy(gameObject);
+            DestroySelf();
         }
+    }
+
+    private void DestroySelf() {
+        _battleManager.MoveDestroyedEnemy(this);
+        Destroy(gameObject);
+    }
+
+    public void Setup(MapInfo mapInfo, BattleManager battleManager) {
+        _mapInfo = mapInfo;
+        _battleManager = battleManager;
     }
 }

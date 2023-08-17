@@ -82,7 +82,7 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 2936261905421385673}
   attackSpeed: 0.5
   rotateSpeed: 10
-  projectileDamage: 1
+  projectileDamage: 5
   projectileSpeed: 25
 --- !u!212 &5247396042242389859
 SpriteRenderer:

@@ -6,10 +6,14 @@ using UnityEngine.UIElements;
 
 public class HudController : MonoBehaviour {
     [SerializeField] private Camera sceneCamera;
+    [SerializeField] private BattleManager battleManager;
     [SerializeField] private MapInfo mapInfo;
     [SerializeField] private PlayerInfo playerInfo;
     
     private VisualElement _root;
+    private Label _wavesLabel;
+    private Label _livesLabel;
+    private Button _waveStartButton;
     private VisualElement _bottomPanel;
     private VisualElement _dragElement;
     private List<VisualElement> _towerScreenElements;
@@ -18,8 +22,7 @@ public class HudController : MonoBehaviour {
     private int _chosenPointIndex = -1;
     
     private void Awake() {
-        _root = GetComponent<UIDocument>().rootVisualElement;
-        _bottomPanel = _root.Q("BottomPanel");
+        SetVisualElements();
         
         // convert tower points to screen points
         const int spotSize = 100;
@@ -99,10 +102,28 @@ public class HudController : MonoBehaviour {
 
     private void OnEnable() {
         PlayerInfo.OnTowersChange += UpdateTowers;
+        BattleManager.OnEndOfWave += EndOfWave;
+        BattleManager.OnWaveChange += WaveChange;
+        BattleManager.OnLivesChange += LivesChange;
     }
 
     private void OnDisable() {
         PlayerInfo.OnTowersChange -= UpdateTowers;
+        BattleManager.OnEndOfWave -= EndOfWave;
+        BattleManager.OnWaveChange -= WaveChange;
+        BattleManager.OnLivesChange -= LivesChange;
+    }
+
+    private void SetVisualElements() {
+        _root = GetComponent<UIDocument>().rootVisualElement;
+        _wavesLabel = _root.Q<Label>("Waves");
+        _livesLabel = _root.Q<Label>("Lives");
+        _waveStartButton = _root.Q<Button>("StartWave");
+        _waveStartButton.clicked += () => {
+            battleManager.StartWave();
+            _waveStartButton.style.display = DisplayStyle.None;
+        };
+        _bottomPanel = _root.Q("BottomPanel");
     }
 
     private void BuildBottomPanel() {
@@ -206,5 +227,17 @@ public class HudController : MonoBehaviour {
     private void UpdateTowers() {
         _bottomPanel.Clear();
         BuildBottomPanel();
+    }
+
+    private void EndOfWave() {
+        _waveStartButton.style.display = DisplayStyle.Flex;
+    }
+
+    private void WaveChange(int currentWave, int totalWaves) {
+        _wavesLabel.text = $"Wave: {currentWave} / {totalWaves}";
+    }
+
+    private void LivesChange(int remainingLives) {
+        _livesLabel.text = $"Lives: {remainingLives}";
     }
 }

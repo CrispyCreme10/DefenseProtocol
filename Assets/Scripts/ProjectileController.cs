@@ -17,7 +17,10 @@ public class ProjectileController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (_enemy == null) return;
+        if (_enemy == null) {
+            Destroy(gameObject);
+            return;
+        }
          
         var dir = _enemy.transform.position - transform.position;
         _rb.velocity =  _speed * dir.normalized;
