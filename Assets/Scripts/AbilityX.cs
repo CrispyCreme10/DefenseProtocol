@@ -9,6 +9,16 @@ public class AbilityX : ScriptableObject {
     [SerializeField] private TargetingType targetingType;
     [SerializeField] private TargetingMultiplicity targetingMultiplicity;
 
+    public TargetingMultiplicity TargetingMultiplicity => targetingMultiplicity;
+
+    public TargetingType TargetingType => targetingType;
+
+    public Sprite IconSprite => iconSprite;
+
+    public float Cooldown => cooldown;
+
+    public string AbilityName => abilityName;
+
     public VisualElement OnSelected() {
         // not all abilities have this
         // what happens when applicable abilities need another 1..N actions to fully activate the ability

@@ -8,7 +8,8 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour {
     public static Action<int, int> OnWaveChange;
     public static Action<int> OnLivesChange;
-    
+
+    [SerializeField] private Camera sceneCamera;
     [SerializeField] 
     private int totalPlayerLives;
     [SerializeField] 
@@ -26,6 +27,7 @@ public class BattleManager : MonoBehaviour {
     private int _currentWaveEnemyIndex;
     private List<EnemyController> _aliveEnemies;
     private List<EnemyController> _destroyedEnemies;
+    private Transform _selectedAbilityTransform;
     
     private void Awake() {
         // init waves
@@ -42,7 +44,13 @@ public class BattleManager : MonoBehaviour {
 
     private void Update() {
         if (_battleComplete) return;
-
+        
+        // move selected ability transform
+        if (_selectedAbilityTransform != null) {
+            _selectedAbilityTransform.position = sceneCamera.ScreenToWorldPoint(Input.mousePosition);
+        }
+        
+        // manage enemies spawn
         if (_playWave) {
             if (_spawnCountdown <= 0) {
                 // spawn enemies in current wave
@@ -110,6 +118,10 @@ public class BattleManager : MonoBehaviour {
         Debug.Log($"GAME OVER: {(playerWon ? "YOU WIN!" : "YOU LOSE")}");
         _battleComplete = true;
         // Time.timeScale = 0f;
+    }
+
+    public void RegisterSelectedAbility(Transform selectedAbilityTransform) {
+        _selectedAbilityTransform = selectedAbilityTransform;
     }
 }
 

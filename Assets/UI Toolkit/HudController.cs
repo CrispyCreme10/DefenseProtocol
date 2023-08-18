@@ -17,10 +17,12 @@ public class HudController : MonoBehaviour {
     private bool _isDragElementSnapped;
     private int _chosenTowerIndex = -1;
     private int _chosenPointIndex = -1;
-    
+
     private void Awake() {
         SetVisualElements();
-        
+    }
+
+    private void Start() {
         // convert tower points to screen points
         const int spotSize = 100;
         _towerScreenElements = new List<VisualElement>();
@@ -200,6 +202,37 @@ public class HudController : MonoBehaviour {
                 _dragElement.Add(dragImage);
                 _root.Add(_dragElement);
             });
+        }
+
+        for (var index = 0; index < Singleton.Instance.PlayerManager.Abilities.Count; index++) {
+            var ability = Singleton.Instance.PlayerManager.Abilities[index];
+            var container = new VisualElement {
+                name = "TowerSlot",
+                style = {
+                    justifyContent = Justify.Center,
+                    alignItems = Align.Center,
+                    width = 100,
+                    height = 100,
+                    // backgroundColor = new Color(255, 255, 255, 0.05f)
+                }
+            };
+
+            var image = new Image {
+                name = "TowerImage",
+                sprite = ability.IconSprite,
+                style = {
+                    width = 75,
+                    height = 75
+                }
+            };
+
+            var i = index;
+            container.RegisterCallback<PointerUpEvent>(evt => {
+                // select/activate ability
+            });
+            
+            container.Add(image);
+            _bottomPanel.Add(container);
         }
     }
 
