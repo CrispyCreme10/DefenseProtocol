@@ -26,7 +26,13 @@ public class AbilityX : ScriptableObject {
     }
 
     private VisualElement OnSelectedLightSnare() {
-        return new VisualElement();
+        var element = new VisualElement {
+            name = "LightSnareSelected"
+        };
+        
+        element.AddToClassList("AbilitySelected");
+        
+        return element;
     }
 
     private void ActivateLightSnare() {
