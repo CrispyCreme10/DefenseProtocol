@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class PlayerManager : MonoBehaviour {
     public static Action OnTowersChange;
+    
 
     [SerializeField] private List<AbilityX> abilities;
     [SerializeField] private List<StackTower> towers;
@@ -13,6 +14,7 @@ public class PlayerManager : MonoBehaviour {
     [SerializeField] private int upgradePoints;
 
     private List<TowerController> _placedTowers;
+    
 
     public List<AbilityX> Abilities => abilities;
     public List<StackTower> Towers => towers;
@@ -22,7 +24,7 @@ public class PlayerManager : MonoBehaviour {
     private void Awake() {
         _placedTowers = new List<TowerController>();
     }
-
+    
     public void SpawnTower(int index, Vector2 position) {
         var tower = Instantiate(towers[index].TowerController, position, Quaternion.identity);
         _placedTowers.Add(tower);
@@ -36,13 +38,13 @@ public class PlayerManager : MonoBehaviour {
 
 [Serializable]
 public class StackTower {
-    [SerializeField] private TowerController _towerController;
-    [SerializeField] private Sprite _towerSprite;
+    [SerializeField] private TowerController towerController;
+    [SerializeField] private Sprite towerSprite;
     [SerializeField] private int amount;
     
     public int Amount => amount;
-    public TowerController TowerController => _towerController;
-    public Sprite TowerSprite => _towerSprite;
+    public TowerController TowerController => towerController;
+    public Sprite TowerSprite => towerSprite;
 
     public void DecrementAmount() {
         amount--;

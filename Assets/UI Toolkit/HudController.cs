@@ -12,11 +12,15 @@ public class HudController : MonoBehaviour {
     private Label _livesLabel;
     private Button _waveStartButton;
     private VisualElement _bottomPanel;
-    private VisualElement _dragElement;
     private List<VisualElement> _towerScreenElements;
+    private List<VisualElement> _abilityElements;
     private bool _isDragElementSnapped;
     private int _chosenTowerIndex = -1;
     private int _chosenPointIndex = -1;
+    
+    // temp items
+    private VisualElement _dragElement;
+    private VisualElement _selectedAbility;
 
     private void Awake() {
         SetVisualElements();
@@ -101,6 +105,7 @@ public class HudController : MonoBehaviour {
 
     private void OnEnable() {
         PlayerManager.OnTowersChange += UpdateTowers;
+        AbilityManager.OnAbilityCooldownChange += UpdateAbilityCooldowns;
         BattleManager.OnWaveChange += WaveChange;
         BattleManager.OnLivesChange += LivesChange;
     }
@@ -124,6 +129,11 @@ public class HudController : MonoBehaviour {
     }
 
     private void BuildBottomPanel() {
+        BuildTowers();
+        BuildAbilities();
+    }
+
+    private void BuildTowers() {
         for (var index = 0; index < Singleton.Instance.PlayerManager.Towers.Count; index++) {
             var stackTower = Singleton.Instance.PlayerManager.Towers[index];
             var container = new VisualElement {
@@ -164,6 +174,8 @@ public class HudController : MonoBehaviour {
 
             var i = index;
             container.RegisterCallback<PointerDownEvent>(evt => {
+                DeselectAbility();
+                
                 _chosenTowerIndex = i;
 
                 _dragElement = new VisualElement {
@@ -203,7 +215,10 @@ public class HudController : MonoBehaviour {
                 _root.Add(_dragElement);
             });
         }
+    }
 
+    private void BuildAbilities() {
+        _abilityElements = new List<VisualElement>();
         for (var index = 0; index < Singleton.Instance.PlayerManager.Abilities.Count; index++) {
             var ability = Singleton.Instance.PlayerManager.Abilities[index];
             var container = new VisualElement {
@@ -221,19 +236,42 @@ public class HudController : MonoBehaviour {
                 name = "TowerImage",
                 sprite = ability.IconSprite,
                 style = {
-                    width = 75,
-                    height = 75
+                    width = 95,
+                    height = 95
                 }
             };
 
             var i = index;
             container.RegisterCallback<PointerUpEvent>(evt => {
                 // select/activate ability
+                Singleton.Instance.AbilityManager.SelectAbility(i);
+
+                _selectedAbility = container;
+                container.style.borderTopColor = Color.white;
+                container.style.borderRightColor = Color.white;
+                container.style.borderBottomColor = Color.white;
+                container.style.borderLeftColor = Color.white;
+                container.style.borderTopWidth = 5;
+                container.style.borderRightWidth = 5;
+                container.style.borderBottomWidth = 5;
+                container.style.borderLeftWidth = 5;
             });
             
             container.Add(image);
             _bottomPanel.Add(container);
+            _abilityElements.Add(container);
         }
+    }
+
+    private void DeselectAbility() {
+        if (_selectedAbility == null) return; 
+        
+        _selectedAbility.style.borderTopWidth = 0;
+        _selectedAbility.style.borderRightWidth = 0;
+        _selectedAbility.style.borderBottomWidth = 0;
+        _selectedAbility.style.borderLeftWidth = 0;
+        
+        Singleton.Instance.AbilityManager.UnsetSelectedAbility();
     }
 
     private void DragElementGreen() {
@@ -255,6 +293,34 @@ public class HudController : MonoBehaviour {
     private void UpdateTowers() {
         _bottomPanel.Clear();
         BuildBottomPanel();
+    }
+
+    private void UpdateAbilityCooldowns(int index, float cooldown) {
+        Debug.Log($"{index}, {cooldown}");
+        
+        var abilityElement = _abilityElements[index];
+        var cooldownLabel = abilityElement.Q<Label>($"CooldownLabel{index}");
+        
+        if (cooldownLabel == null) {
+            cooldownLabel = new Label {
+                name = $"CooldownLabel{index}",
+                text = Mathf.RoundToInt(cooldown).ToString(),
+                style = {
+                    position = Position.Absolute,
+                    width = new Length(100, LengthUnit.Percent),
+                    height = new Length(100, LengthUnit.Percent),
+                    color = Color.white,
+                    fontSize = 40,
+                    backgroundColor = new Color(0, 0, 0, 0.5f)
+                }
+            };
+            
+            abilityElement.Add(cooldownLabel);
+        } else if (cooldown <= 0) {
+            abilityElement.Remove(cooldownLabel);
+        } else {
+            cooldownLabel.text = Mathf.RoundToInt(cooldown).ToString();
+        }
     }
 
     private void WaveChange(int currentWave, int totalWaves) {

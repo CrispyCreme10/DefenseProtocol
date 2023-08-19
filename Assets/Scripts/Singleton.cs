@@ -9,6 +9,7 @@ public class Singleton : MonoBehaviour
     public PlayerManager PlayerManager { get; private set; }
     public MapManager MapManager { get; private set; }
     public BattleManager BattleManager { get; private set; }
+    public AbilityManager AbilityManager { get; private set; }
 
     private void Awake() {
         if (Instance != null && Instance != this) {
@@ -20,5 +21,6 @@ public class Singleton : MonoBehaviour
         PlayerManager = GetComponentInChildren<PlayerManager>();
         MapManager = GetComponentInChildren<MapManager>();
         BattleManager = GetComponentInChildren<BattleManager>();
+        AbilityManager = GetComponentInChildren<AbilityManager>();
     }
 }

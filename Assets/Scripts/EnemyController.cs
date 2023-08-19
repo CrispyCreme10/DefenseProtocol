@@ -11,9 +11,8 @@ public class EnemyController : MonoBehaviour {
 
     public float TotalDistance => moveSpeed * _timeAlive;
     
-    private MapManager _mapManager;
-    private BattleManager _battleManager;
     private Rigidbody2D _rb;
+    private SpriteRenderer _spriteRenderer;
     private int _currentPathPointIndex = 1;
     private bool _canMove = true;
     private float _timeAlive;
@@ -24,6 +23,7 @@ public class EnemyController : MonoBehaviour {
     
     private void Awake() {
         _rb = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _health = maxHealth;
     }
 
@@ -45,13 +45,13 @@ public class EnemyController : MonoBehaviour {
     private void Move() {
         if (!_canMove) return;
         
-        var nextPoint = _mapManager.PathPoints[_currentPathPointIndex];
+        var nextPoint = Singleton.Instance.MapManager.PathPoints[_currentPathPointIndex];
         var distance = Vector3.Distance(transform.position, nextPoint);
         if (distance <= 0.01) {
             _currentPathPointIndex++;
-            if (_currentPathPointIndex >= _mapManager.PathPoints.Length) {
+            if (_currentPathPointIndex >= Singleton.Instance.MapManager.PathPoints.Length) {
                 // reached end of path
-                _battleManager.DecrementLives();
+                Singleton.Instance.BattleManager.DecrementLives();
                 DestroySelf();
             }
         } else {
@@ -67,13 +67,18 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
-    private void DestroySelf() {
-        _battleManager.MoveDestroyedEnemy(this);
-        Destroy(gameObject);
+    public IEnumerator Stun(float duration) {
+        // apply stun effect
+        _canMove = false;
+        var defaultColor = _spriteRenderer.color;
+        _spriteRenderer.color = Color.yellow;
+        yield return new WaitForSeconds(duration);
+        _canMove = true;
+        _spriteRenderer.color = defaultColor;
     }
 
-    public void Setup(MapManager mapManager, BattleManager battleManager) {
-        _mapManager = mapManager;
-        _battleManager = battleManager;
+    private void DestroySelf() {
+        Singleton.Instance.BattleManager.MoveDestroyedEnemy(this);
+        Destroy(gameObject);
     }
 }

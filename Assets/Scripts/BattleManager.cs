@@ -27,7 +27,7 @@ public class BattleManager : MonoBehaviour {
     private int _currentWaveEnemyIndex;
     private List<EnemyController> _aliveEnemies;
     private List<EnemyController> _destroyedEnemies;
-    private Transform _selectedAbilityTransform;
+    
     
     private void Awake() {
         // init waves
@@ -44,12 +44,7 @@ public class BattleManager : MonoBehaviour {
 
     private void Update() {
         if (_battleComplete) return;
-        
-        // move selected ability transform
-        if (_selectedAbilityTransform != null) {
-            _selectedAbilityTransform.position = sceneCamera.ScreenToWorldPoint(Input.mousePosition);
-        }
-        
+
         // manage enemies spawn
         if (_playWave) {
             if (_spawnCountdown <= 0) {
@@ -57,7 +52,6 @@ public class BattleManager : MonoBehaviour {
                 var enemyWaveInfo = waves[currentWave].Enemies[_currentWaveEnemyIndex];
                 var enemy = Instantiate(enemyWaveInfo.EnemyController,
                     Singleton.Instance.MapManager.PathPoints[0], Quaternion.identity);
-                enemy.Setup(Singleton.Instance.MapManager, this);
                 // for tracking purposes
                 _aliveEnemies.Add(enemy);
                 // update spawn count
@@ -118,10 +112,6 @@ public class BattleManager : MonoBehaviour {
         Debug.Log($"GAME OVER: {(playerWon ? "YOU WIN!" : "YOU LOSE")}");
         _battleComplete = true;
         // Time.timeScale = 0f;
-    }
-
-    public void RegisterSelectedAbility(Transform selectedAbilityTransform) {
-        _selectedAbilityTransform = selectedAbilityTransform;
     }
 }
 

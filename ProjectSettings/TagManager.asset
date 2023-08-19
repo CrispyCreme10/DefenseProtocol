@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Projectile
+  - Ability
   layers:
   - Default
   - TransparentFX
@@ -42,4 +43,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 759062253
+    locked: 0
+  - name: Tower
+    uniqueID: 2378189291
+    locked: 0
+  - name: Ability
+    uniqueID: 1286826399
     locked: 0

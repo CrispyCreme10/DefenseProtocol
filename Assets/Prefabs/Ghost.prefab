@@ -117,7 +117,7 @@ Transform:
   m_Children:
   - {fileID: 6915298622178787305}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4977661368821238247
 MonoBehaviour:
@@ -131,7 +131,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d39a57935f7347138670c7ddacfbc50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapInfo: {fileID: 0}
   moveSpeed: 1.5
   maxHealth: 30
   _health: 0
