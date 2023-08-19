@@ -28,6 +28,7 @@ public class BattleManager : MonoBehaviour {
     private List<EnemyController> _aliveEnemies;
     private List<EnemyController> _destroyedEnemies;
     
+    public bool IsWaveActive => _playWave || _aliveEnemies.Count > 0;
     
     private void Awake() {
         // init waves

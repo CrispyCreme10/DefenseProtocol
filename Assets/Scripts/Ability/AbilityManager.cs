@@ -5,22 +5,18 @@ using System.Linq;
 using UnityEngine;
 
 public class AbilityManager : MonoBehaviour {
-    public static Action<int, float> OnAbilityCooldownChange;
-
+    public Action OnDeselectAbility;
+    
     [SerializeField] private Camera sceneCamera;
 
     private CooldownManager _cooldownManager;
     private Transform _selectedAbilityTransform;
     private int _selectedAbilityIndex = -1;
 
-    private void Start() {
-        SetupAbilityCooldowns();
-        
-        OnAbilityCooldownChange += _cooldownManager.OnCooldownChange;
-    }
+    public CooldownManager CooldownManager => _cooldownManager;
 
-    private void OnDisable() {
-        OnAbilityCooldownChange -= _cooldownManager.OnCooldownChange;
+    private void Awake() {
+        SetupAbilityCooldowns();
     }
 
     private void Update() {
@@ -59,6 +55,7 @@ public class AbilityManager : MonoBehaviour {
         Destroy(_selectedAbilityTransform.gameObject);
         _selectedAbilityTransform = null;
         _selectedAbilityIndex = -1;
+        OnDeselectAbility?.Invoke();
     }
 
     private void ActivateAbility() {

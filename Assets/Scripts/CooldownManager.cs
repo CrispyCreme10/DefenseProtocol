@@ -5,9 +5,8 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class CooldownManager : SerializedMonoBehaviour {
-    public Action<int, float> OnCooldownChange;
+    [ReadOnly] public Action<int, float> OnCooldownChange;
     
-    [ReadOnly]
     private Dictionary<int, CooldownData> _cooldowns;
 
     public void Setup(IEnumerable<(int, float)> cooldownObjs) {
@@ -17,10 +16,12 @@ public class CooldownManager : SerializedMonoBehaviour {
     private void Update() {
         foreach (var key in _cooldowns.Keys) {
             if (!_cooldowns[key].isActive) continue;
-            
+
             var cooldownData = _cooldowns[key];
             cooldownData.cooldown -= Time.deltaTime;
             OnCooldownChange?.Invoke(key, cooldownData.cooldown);
+            
+            // Debug.Log($"{key}: {cooldownData.cooldown}");
 
             if (cooldownData.cooldown <= 0) {
                 cooldownData.isActive = false;
@@ -39,7 +40,7 @@ public class CooldownManager : SerializedMonoBehaviour {
     }
     
     [Serializable]
-    private struct CooldownData {
+    private class CooldownData {
         public float cooldown;
         public bool isActive;
 

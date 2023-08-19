@@ -105,13 +105,16 @@ public class HudController : MonoBehaviour {
 
     private void OnEnable() {
         PlayerManager.OnTowersChange += UpdateTowers;
-        AbilityManager.OnAbilityCooldownChange += UpdateAbilityCooldowns;
+        Singleton.Instance.AbilityManager.CooldownManager.OnCooldownChange += UpdateAbilityCooldowns;
+        Singleton.Instance.AbilityManager.OnDeselectAbility += DeselectAbility;
         BattleManager.OnWaveChange += WaveChange;
         BattleManager.OnLivesChange += LivesChange;
     }
 
     private void OnDisable() {
         PlayerManager.OnTowersChange -= UpdateTowers;
+        Singleton.Instance.AbilityManager.CooldownManager.OnCooldownChange -= UpdateAbilityCooldowns;
+        Singleton.Instance.AbilityManager.OnDeselectAbility -= DeselectAbility;
         BattleManager.OnWaveChange -= WaveChange;
         BattleManager.OnLivesChange -= LivesChange;
     }
@@ -222,7 +225,7 @@ public class HudController : MonoBehaviour {
         for (var index = 0; index < Singleton.Instance.PlayerManager.Abilities.Count; index++) {
             var ability = Singleton.Instance.PlayerManager.Abilities[index];
             var container = new VisualElement {
-                name = "TowerSlot",
+                name = "AbilitySlot",
                 style = {
                     justifyContent = Justify.Center,
                     alignItems = Align.Center,
@@ -233,7 +236,7 @@ public class HudController : MonoBehaviour {
             };
 
             var image = new Image {
-                name = "TowerImage",
+                name = "AbilityImage",
                 sprite = ability.IconSprite,
                 style = {
                     width = 95,
@@ -243,6 +246,8 @@ public class HudController : MonoBehaviour {
 
             var i = index;
             container.RegisterCallback<PointerUpEvent>(evt => {
+                if (!Singleton.Instance.BattleManager.IsWaveActive) return;
+                
                 // select/activate ability
                 Singleton.Instance.AbilityManager.SelectAbility(i);
 
@@ -307,10 +312,10 @@ public class HudController : MonoBehaviour {
                 text = Mathf.RoundToInt(cooldown).ToString(),
                 style = {
                     position = Position.Absolute,
-                    width = new Length(100, LengthUnit.Percent),
-                    height = new Length(100, LengthUnit.Percent),
+                    width = 95,
+                    height = 95,
                     color = Color.white,
-                    fontSize = 40,
+                    fontSize = 50,
                     backgroundColor = new Color(0, 0, 0, 0.5f)
                 }
             };

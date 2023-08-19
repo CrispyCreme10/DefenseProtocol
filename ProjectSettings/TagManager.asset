@@ -53,6 +53,9 @@ TagManager:
   - name: Tower
     uniqueID: 2378189291
     locked: 0
+  - name: Projectile
+    uniqueID: 3979889951
+    locked: 0
   - name: Ability
     uniqueID: 1286826399
     locked: 0

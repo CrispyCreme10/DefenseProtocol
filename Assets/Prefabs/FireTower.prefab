@@ -82,7 +82,7 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 2936261905421385673}
   attackSpeed: 0.5
   rotateSpeed: 10
-  projectileDamage: 5
+  projectileDamage: 3
   projectileSpeed: 25
 --- !u!212 &5247396042242389859
 SpriteRenderer:
@@ -123,7 +123,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1916778005
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 992962416, guid: 144f99721502a434fad6380015a1f719, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
