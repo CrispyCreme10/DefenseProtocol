@@ -55,15 +55,17 @@ public class AbilityManager : MonoBehaviour {
     }
 
     public void UnsetSelectedAbility() {
+        if (_selectedAbilityTransform == null) return;
         Destroy(_selectedAbilityTransform.gameObject);
         _selectedAbilityTransform = null;
         _selectedAbilityIndex = -1;
     }
 
     private void ActivateAbility() {
-        if (name == "LightSnare") {
+        if (Singleton.Instance.PlayerManager.Abilities[_selectedAbilityIndex].name == "LightSnare") {
             var comp = _selectedAbilityTransform.GetComponent<LightSnareAbility>();
             foreach (var enemyController in comp.EnemiesInRange) {
+                Debug.Log(enemyController.name);
                 StartCoroutine(enemyController.Stun(comp.StunDuration));
             }
         }

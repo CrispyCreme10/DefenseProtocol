@@ -47,6 +47,9 @@ TagManager:
   - name: Ground
     uniqueID: 759062253
     locked: 0
+  - name: Enemy
+    uniqueID: 2289291489
+    locked: 0
   - name: Tower
     uniqueID: 2378189291
     locked: 0

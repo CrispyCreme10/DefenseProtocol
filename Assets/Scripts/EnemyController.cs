@@ -71,9 +71,12 @@ public class EnemyController : MonoBehaviour {
         // apply stun effect
         _canMove = false;
         var defaultColor = _spriteRenderer.color;
+        var previousVelocity = _rb.velocity;
         _spriteRenderer.color = Color.yellow;
+        _rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(duration);
         _canMove = true;
+        _rb.velocity = previousVelocity;
         _spriteRenderer.color = defaultColor;
     }
 
