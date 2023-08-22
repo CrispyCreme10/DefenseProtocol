@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,7 +12,9 @@ public class HudController : MonoBehaviour {
     private Label _wavesLabel;
     private Label _livesLabel;
     private Button _waveStartButton;
-    private VisualElement _bottomPanel;
+    private VisualElement _towersContainer;
+    private VisualElement[] _utilitySlots;
+    private VisualElement _abilitiesContainer;
     private List<VisualElement> _towerScreenElements;
     private List<VisualElement> _abilityElements;
     private bool _isDragElementSnapped;
@@ -105,18 +108,18 @@ public class HudController : MonoBehaviour {
 
     private void OnEnable() {
         PlayerManager.OnTowersChange += UpdateTowers;
-        Singleton.Instance.AbilityManager.CooldownManager.OnCooldownChange += UpdateAbilityCooldowns;
+        Singleton.Instance.AbilityManager.WaveCooldownManager.OnCooldownChange += UpdateAbilityCooldowns;
         Singleton.Instance.AbilityManager.OnDeselectAbility += DeselectAbility;
-        BattleManager.OnWaveChange += WaveChange;
-        BattleManager.OnLivesChange += LivesChange;
+        Singleton.Instance.BattleManager.OnWaveChange += WaveChange;
+        Singleton.Instance.BattleManager.OnLivesChange += LivesChange;
     }
 
     private void OnDisable() {
         PlayerManager.OnTowersChange -= UpdateTowers;
-        Singleton.Instance.AbilityManager.CooldownManager.OnCooldownChange -= UpdateAbilityCooldowns;
+        Singleton.Instance.AbilityManager.WaveCooldownManager.OnCooldownChange -= UpdateAbilityCooldowns;
         Singleton.Instance.AbilityManager.OnDeselectAbility -= DeselectAbility;
-        BattleManager.OnWaveChange -= WaveChange;
-        BattleManager.OnLivesChange -= LivesChange;
+        Singleton.Instance.BattleManager.OnWaveChange -= WaveChange;
+        Singleton.Instance.BattleManager.OnLivesChange -= LivesChange;
     }
 
     private void SetVisualElements() {
@@ -128,11 +131,14 @@ public class HudController : MonoBehaviour {
             Singleton.Instance.BattleManager.StartWave();
             _waveStartButton.style.display = DisplayStyle.None;
         };
-        _bottomPanel = _root.Q("BottomPanel");
+        _towersContainer = _root.Q("Towers");
+        _utilitySlots = _root.Q("Utilities").Children().ToArray();
+        _abilitiesContainer = _root.Q("Abilities");
     }
 
     private void BuildBottomPanel() {
         BuildTowers();
+        BuildUtilities();
         BuildAbilities();
     }
 
@@ -159,21 +165,10 @@ public class HudController : MonoBehaviour {
                 }
             };
 
-            var label = new Label {
-                name = "CountLabel",
-                text = stackTower.Amount.ToString(),
-                style = {
-                    position = Position.Absolute,
-                    top = 0,
-                    right = 0,
-                    color = Color.white,
-                    fontSize = 20f
-                }
-            };
-
-            container.Add(label);
+            var label = CreateAmountLabel(stackTower.Amount, $"TowerLabel{index}");
             container.Add(image);
-            _bottomPanel.Add(container);
+            container.Add(label);
+            _towersContainer.Add(container);
 
             var i = index;
             container.RegisterCallback<PointerDownEvent>(evt => {
@@ -220,6 +215,25 @@ public class HudController : MonoBehaviour {
         }
     }
 
+    private void BuildUtilities() {
+        for (var index = 0; index < Singleton.Instance.PlayerManager.Utilities.Count; index++) {
+            var stackUtility = Singleton.Instance.PlayerManager.Utilities[index];
+
+            var image = new Image {
+                name = $"Utility{index}",
+                sprite = stackUtility.Utility.IconSprite,
+                style = {
+                    width = new Length(100, LengthUnit.Percent),
+                    height = new Length(100, LengthUnit.Percent)
+                }
+            };
+
+            var label = CreateAmountLabel(stackUtility.Amount, $"UtilityLabel{index}");
+            _utilitySlots[index].Add(image);
+            _utilitySlots[index].Add(label);
+        }
+    }
+    
     private void BuildAbilities() {
         _abilityElements = new List<VisualElement>();
         for (var index = 0; index < Singleton.Instance.PlayerManager.Abilities.Count; index++) {
@@ -263,7 +277,7 @@ public class HudController : MonoBehaviour {
             });
             
             container.Add(image);
-            _bottomPanel.Add(container);
+            _abilitiesContainer.Add(container);
             _abilityElements.Add(container);
         }
     }
@@ -277,6 +291,30 @@ public class HudController : MonoBehaviour {
         _selectedAbility.style.borderLeftWidth = 0;
         
         Singleton.Instance.AbilityManager.UnsetSelectedAbility();
+    }
+
+    private Label CreateAmountLabel(int amount, string labelName = "") {
+        var label = new Label {
+            name = string.IsNullOrEmpty(labelName) ? "CountLabel" : labelName,
+            text = amount.ToString(),
+            style = {
+                position = Position.Absolute,
+                top = 0,
+                right = 0,
+                color = Color.white,
+                fontSize = 20f,
+                paddingTop = 2,
+                paddingRight = 4,
+                paddingBottom = 0,
+                paddingLeft = 0,
+                marginTop = 0,
+                marginRight = 0,
+                marginBottom = 0,
+                marginLeft = 0,
+            }
+        };
+        
+        return label;
     }
 
     private void DragElementGreen() {
@@ -296,7 +334,7 @@ public class HudController : MonoBehaviour {
     }
 
     private void UpdateTowers() {
-        _bottomPanel.Clear();
+        _towersContainer.Clear();
         BuildBottomPanel();
     }
 

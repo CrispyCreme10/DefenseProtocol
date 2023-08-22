@@ -4,7 +4,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class CooldownManager : SerializedMonoBehaviour {
+public class TimedCooldownManager : SerializedMonoBehaviour {
     [ReadOnly] public Action<int, float> OnCooldownChange;
     
     private Dictionary<int, CooldownData> _cooldowns;
@@ -16,22 +16,26 @@ public class CooldownManager : SerializedMonoBehaviour {
     private void Update() {
         foreach (var key in _cooldowns.Keys) {
             if (!_cooldowns[key].isActive) continue;
-
-            var cooldownData = _cooldowns[key];
-            cooldownData.cooldown -= Time.deltaTime;
-            OnCooldownChange?.Invoke(key, cooldownData.cooldown);
             
-            // Debug.Log($"{key}: {cooldownData.cooldown}");
-
-            if (cooldownData.cooldown <= 0) {
-                cooldownData.isActive = false;
-            }
+            ReduceCooldown(key);
         }
     }
 
     public void StartCooldown(int key) {
         if (_cooldowns.TryGetValue(key, out var cooldown)) {
             cooldown.isActive = true;
+        }
+    }
+
+    private void ReduceCooldown(int key) {
+        var cooldownData = _cooldowns[key];
+        cooldownData.cooldown -= Time.deltaTime;
+        OnCooldownChange?.Invoke(key, cooldownData.cooldown);
+            
+        // Debug.Log($"{key}: {cooldownData.cooldown}");
+
+        if (cooldownData.cooldown <= 0) {
+            cooldownData.isActive = false;
         }
     }
 
@@ -50,3 +54,4 @@ public class CooldownManager : SerializedMonoBehaviour {
         }
     }
 }
+

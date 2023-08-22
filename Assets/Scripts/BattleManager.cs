@@ -6,8 +6,8 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour {
-    public static Action<int, int> OnWaveChange;
-    public static Action<int> OnLivesChange;
+    public Action<int, int> OnWaveChange;
+    public Action<int> OnLivesChange;
 
     [SerializeField] private Camera sceneCamera;
     [SerializeField] 

@@ -5,7 +5,8 @@ using UnityEngine.UIElements;
 [CreateAssetMenu(menuName = "Ability")]
 public class AbilityX : ScriptableObject {
     [SerializeField] private string abilityName;
-    [SerializeField] private float cooldown;
+    [SerializeField] private float timedCooldown;
+    [SerializeField] private int waveCooldown;
     [SerializeField] private Sprite iconSprite;
     [SerializeField] private TargetingType targetingType;
     [SerializeField] private TargetingMultiplicity targetingMultiplicity;
@@ -17,7 +18,8 @@ public class AbilityX : ScriptableObject {
 
     public Sprite IconSprite => iconSprite;
 
-    public float Cooldown => cooldown;
+    public float TimedCooldown => timedCooldown;
+    public int WaveCooldown => waveCooldown;
 
     public string AbilityName => abilityName;
     public GameObject SelectedAbilityPrefab => selectedAbilityPrefab;

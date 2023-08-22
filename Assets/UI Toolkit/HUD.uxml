@@ -1,4 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/HUD.uss?fileID=7433441132597879392&amp;guid=6fef624ceb2c3874cbf534fad8a1018f&amp;type=3#HUD" />
+    <Style src="project://database/Assets/global.uss?fileID=7433441132597879392&amp;guid=d71fe8cbfc7c04545841e244a6596a7f&amp;type=3#global" />
     <ui:VisualElement name="Root" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: space-between; height: 100px; width: 100%; flex-direction: column; align-items: center; align-self: auto;">
         <ui:VisualElement name="TopPanel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.59); height: 100px; max-height: 80px; width: 100%; align-items: center; justify-content: space-around; flex-direction: row;">
             <ui:Label tabindex="-1" text="Wave: 0 / 0" display-tooltip-when-elided="true" name="Waves" style="color: rgb(255, 255, 255); font-size: 50px;" />
@@ -9,6 +11,17 @@
                 <ui:Button text="Start Wave" display-tooltip-when-elided="true" name="StartWave" style="font-size: 50px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; display: flex;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="BottomPanel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.92); width: 100%; height: 150px; align-items: center; position: relative; justify-content: space-between; padding-left: 20px; padding-right: 10px; max-height: 150px; min-height: 150px; flex-direction: row;" />
+        <ui:VisualElement name="BottomPanel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.92); width: 100%; height: 150px; align-items: center; position: relative; justify-content: space-between; padding-left: 0; padding-right: 0; max-height: 150px; min-height: 150px; flex-direction: row; padding-top: 0; padding-bottom: 0;">
+            <ui:VisualElement name="Towers" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%; flex-direction: row; padding-left: 10px; padding-right: 10px; margin-left: 0; margin-bottom: 0; align-items: center;" />
+            <ui:VisualElement name="Utilities" style="flex-grow: 1; width: 225px; height: 100%; max-width: 225px; min-width: 225px; flex-direction: row; align-items: flex-start; flex-wrap: wrap; align-self: auto; background-color: rgba(94, 94, 94, 0.49);">
+                <ui:VisualElement name="UtilitySlot" class="utility-slot" />
+                <ui:VisualElement name="UtilitySlot" class="utility-slot" style="flex-grow: 1; width: 34%; height: 50%;" />
+                <ui:VisualElement name="UtilitySlot" class="utility-slot" style="flex-grow: 1; width: 33%; height: 50%;" />
+                <ui:VisualElement name="UtilitySlot" class="utility-slot" style="flex-grow: 1; width: 33%; height: 50%;" />
+                <ui:VisualElement name="UtilitySlot" class="utility-slot" style="flex-grow: 1; width: 34%; height: 50%;" />
+                <ui:VisualElement name="UtilitySlot" class="utility-slot" style="flex-grow: 1; width: 33%; height: 50%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Abilities" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%; flex-direction: row; align-items: center; padding-left: 10px; padding-right: 10px;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

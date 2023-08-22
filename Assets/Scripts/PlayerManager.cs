@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour {
 
     [SerializeField] private List<AbilityX> abilities;
     [SerializeField] private List<StackTower> towers;
-    [SerializeField] private List<UtilityX> utilities;
+    [SerializeField] private List<StackUtility> utilities;
     [SerializeField] private int upgradePoints;
 
     private List<TowerController> _placedTowers;
@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour {
 
     public List<AbilityX> Abilities => abilities;
     public List<StackTower> Towers => towers;
-    public List<UtilityX> Utilities => utilities;
+    public List<StackUtility> Utilities => utilities;
     public int UpgradePoints => upgradePoints;
 
     private void Awake() {
@@ -49,6 +49,15 @@ public class StackTower {
     public void DecrementAmount() {
         amount--;
     }
+}
+
+[Serializable]
+public class StackUtility {
+    [SerializeField] private UtilityX utility;
+    [SerializeField] private int amount;
+
+    public UtilityX Utility => utility;
+    public int Amount => amount;
 }
 
 public enum TargetingType {

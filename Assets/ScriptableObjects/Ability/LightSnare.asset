@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: LightSnare
   m_EditorClassIdentifier: 
   abilityName: Light Snare
-  cooldown: 30
+  timedCooldown: 0
+  waveCooldown: 1
   iconSprite: {fileID: 21300000, guid: feb8709f10385a94095b55fe8d0f625c, type: 3}
   targetingType: 0
   targetingMultiplicity: 0

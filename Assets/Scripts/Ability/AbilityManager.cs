@@ -9,14 +9,22 @@ public class AbilityManager : MonoBehaviour {
     
     [SerializeField] private Camera sceneCamera;
 
-    private CooldownManager _cooldownManager;
+    private WaveCooldownManager _waveCooldownManager;
     private Transform _selectedAbilityTransform;
     private int _selectedAbilityIndex = -1;
 
-    public CooldownManager CooldownManager => _cooldownManager;
+    public WaveCooldownManager WaveCooldownManager => _waveCooldownManager;
 
     private void Awake() {
         SetupAbilityCooldowns();
+    }
+
+    private void OnEnable() {
+        Singleton.Instance.BattleManager.OnWaveChange += WaveChange;
+    }
+
+    private void OnDisable() {
+        Singleton.Instance.BattleManager.OnWaveChange -= WaveChange;
     }
 
     private void Update() {
@@ -29,19 +37,21 @@ public class AbilityManager : MonoBehaviour {
     }
 
     private void SetupAbilityCooldowns() {
-        _cooldownManager = gameObject.AddComponent<CooldownManager>();
-        _cooldownManager.Setup(Singleton.Instance.PlayerManager.Abilities.Select((a, index) => (index, a.Cooldown)));
+        _waveCooldownManager = new WaveCooldownManager();
+        var abilitiesFormatted = Singleton.Instance.PlayerManager.Abilities.Select((a, index) =>
+            (index, Mathf.FloorToInt(a.WaveCooldown)));
+        _waveCooldownManager.Setup(abilitiesFormatted);
     }
 
     public void SelectAbility(int abilityIndex) {
-        if (!_cooldownManager.IsCooldownActive(abilityIndex)) {
+        if (!_waveCooldownManager.IsCooldownActive(abilityIndex)) {
             SetSelectedAbility(Singleton.Instance.PlayerManager.Abilities[abilityIndex].SelectedAbilityPrefab,
                 abilityIndex);
         }
     }
 
     public void StartCooldown(int abilityIndex) {
-        _cooldownManager.StartCooldown(abilityIndex);
+        _waveCooldownManager.StartCooldown(abilityIndex);
     }
 
     public void SetSelectedAbility(GameObject selectedAbilityPrefab, int index) {
@@ -69,6 +79,10 @@ public class AbilityManager : MonoBehaviour {
 
         StartCooldown(_selectedAbilityIndex);
         UnsetSelectedAbility();
+    }
+    
+    private void WaveChange(int currentWave, int totalWaves) {
+        _waveCooldownManager.ReduceAllActiveCooldowns(1);
     }
 
     private Vector3 GetMousePositionAdj() {

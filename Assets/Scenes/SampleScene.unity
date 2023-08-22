@@ -2504,7 +2504,9 @@ MonoBehaviour:
   - towerController: {fileID: 4663472372705260428, guid: 210d78a5d461c2a41b348e1d8ac101ef, type: 3}
     towerSprite: {fileID: 992962416, guid: 144f99721502a434fad6380015a1f719, type: 3}
     amount: 3
-  utilities: []
+  utilities:
+  - utility: {fileID: 11400000, guid: 08193dcecb7c32e4384390a17e6ba56b, type: 2}
+    amount: 2
   upgradePoints: 3
 --- !u!1 &815635555
 GameObject:
