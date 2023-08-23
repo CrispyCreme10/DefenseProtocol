@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour {
     private int _currentPathPointIndex = 1;
     private bool _canMove = true;
     private float _timeAlive;
+    private IEnumerator _stunCoroutine;
     
     [SerializeField]
     [ReadOnly]
@@ -67,7 +68,12 @@ public class EnemyController : MonoBehaviour {
         }
     }
 
-    public IEnumerator Stun(float duration) {
+    public void StartStun(float duration) {
+        _stunCoroutine = Stun(duration);
+        StartCoroutine(_stunCoroutine);
+    }
+
+    private IEnumerator Stun(float duration) {
         // apply stun effect
         _canMove = false;
         var defaultColor = _spriteRenderer.color;
@@ -82,6 +88,9 @@ public class EnemyController : MonoBehaviour {
 
     private void DestroySelf() {
         Singleton.Instance.BattleManager.MoveDestroyedEnemy(this);
+        if (_stunCoroutine != null) {
+            StopCoroutine(_stunCoroutine);
+        }
         Destroy(gameObject);
     }
 }

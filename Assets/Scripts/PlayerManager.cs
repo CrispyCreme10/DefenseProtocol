@@ -39,12 +39,11 @@ public class PlayerManager : MonoBehaviour {
 [Serializable]
 public class StackTower {
     [SerializeField] private TowerController towerController;
-    [SerializeField] private Sprite towerSprite;
     [SerializeField] private int amount;
     
     public int Amount => amount;
     public TowerController TowerController => towerController;
-    public Sprite TowerSprite => towerSprite;
+    public Sprite TowerSprite => towerController.Sprite;
 
     public void DecrementAmount() {
         amount--;

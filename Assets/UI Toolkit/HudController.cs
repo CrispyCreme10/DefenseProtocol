@@ -335,34 +335,39 @@ public class HudController : MonoBehaviour {
 
     private void UpdateTowers() {
         _towersContainer.Clear();
-        BuildBottomPanel();
+        BuildTowers();
     }
 
     private void UpdateAbilityCooldowns(int index, float cooldown) {
         Debug.Log($"{index}, {cooldown}");
         
         var abilityElement = _abilityElements[index];
-        var cooldownLabel = abilityElement.Q<Label>($"CooldownLabel{index}");
+        var cooldownEl = abilityElement.Q<VisualElement>($"CooldownLabelContainer{index}");
         
-        if (cooldownLabel == null) {
-            cooldownLabel = new Label {
+        if (cooldownEl == null) {
+            cooldownEl = new VisualElement {
+                name = $"CooldownLabelContainer{index}"
+            };
+            
+            var cooldownLabel = new Label {
                 name = $"CooldownLabel{index}",
                 text = Mathf.RoundToInt(cooldown).ToString(),
                 style = {
                     position = Position.Absolute,
-                    width = 95,
-                    height = 95,
+                    width = new Length(100, LengthUnit.Percent),
+                    height = new Length(100, LengthUnit.Percent),
                     color = Color.white,
                     fontSize = 50,
                     backgroundColor = new Color(0, 0, 0, 0.5f)
                 }
             };
             
-            abilityElement.Add(cooldownLabel);
+            cooldownEl.Add(cooldownLabel);
+            abilityElement.Add(cooldownEl);
         } else if (cooldown <= 0) {
-            abilityElement.Remove(cooldownLabel);
+            abilityElement.Remove(cooldownEl);
         } else {
-            cooldownLabel.text = Mathf.RoundToInt(cooldown).ToString();
+            cooldownEl.Q<Label>($"CooldownLabel{index}").text = Mathf.RoundToInt(cooldown).ToString();
         }
     }
 

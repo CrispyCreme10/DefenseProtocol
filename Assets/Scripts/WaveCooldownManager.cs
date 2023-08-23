@@ -15,6 +15,8 @@ public class WaveCooldownManager {
     public void StartCooldown(int key) {
         if (_cooldowns.TryGetValue(key, out var cooldown)) {
             cooldown.isActive = true;
+            
+            OnCooldownChange?.Invoke(key, cooldown.cooldown);
         }
     }
 
@@ -34,6 +36,7 @@ public class WaveCooldownManager {
             
         if (cooldown.cooldown <= 0) {
             cooldown.isActive = false;
+            cooldown.cooldown = cooldown.cooldownReset;
         }
     }
 
@@ -43,10 +46,12 @@ public class WaveCooldownManager {
     
     [Serializable]
     private class CooldownData {
+        public int cooldownReset;
         public int cooldown;
         public bool isActive;
 
         public CooldownData(int cooldown, bool isActive) {
+            cooldownReset = cooldown;
             this.cooldown = cooldown;
             this.isActive = isActive;
         }

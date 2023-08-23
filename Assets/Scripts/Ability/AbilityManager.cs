@@ -73,7 +73,7 @@ public class AbilityManager : MonoBehaviour {
             var comp = _selectedAbilityTransform.GetComponent<LightSnareAbility>();
             foreach (var enemyController in comp.EnemiesInRange) {
                 Debug.Log(enemyController.name);
-                StartCoroutine(enemyController.Stun(comp.StunDuration));
+                enemyController.StartStun(comp.StunDuration);
             }
         }
 

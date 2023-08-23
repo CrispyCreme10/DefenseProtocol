@@ -80,10 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5388310167428226841, guid: 82fff409fe2be4645b7bd8f519981426, type: 3}
   projectileSpawnPoint: {fileID: 2936261905421385673}
-  attackSpeed: 0.5
-  rotateSpeed: 10
-  projectileDamage: 3
-  projectileSpeed: 25
+  data: {fileID: 11400000, guid: 8af8b065c3325d147adade625cc8c11e, type: 2}
 --- !u!212 &5247396042242389859
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -125,7 +122,7 @@ SpriteRenderer:
   m_SortingLayerID: -1916778005
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 992962416, guid: 144f99721502a434fad6380015a1f719, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 944dd17b9ff1b43448ac4b73a822c387, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

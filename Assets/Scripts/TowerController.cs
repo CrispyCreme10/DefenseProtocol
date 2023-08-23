@@ -6,15 +6,14 @@ using UnityEngine;
 public class TowerController : MonoBehaviour {
     [SerializeField] private ProjectileController projectilePrefab;
     [SerializeField] private Transform projectileSpawnPoint;
-    [SerializeField] private float attackSpeed = 1f;
-    [SerializeField] private float rotateSpeed = 10f;
-    [SerializeField] private int projectileDamage = 10;
-    [SerializeField] private float projectileSpeed = 10f;
-
+    [SerializeField] private TowerX data;
+    
     private SpriteRenderer _spriteRenderer;
     private List<EnemyController> _enemyControllers;
     private float _attackSpeedTimer;
     private bool _finishedRotate;
+
+    public Sprite Sprite => data.Sprite;
 
     private void Awake() {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -24,13 +23,13 @@ public class TowerController : MonoBehaviour {
     private void FixedUpdate() {
         var targetEnemy = GetFirstTargetInRange();
         if (targetEnemy == null) {
-            RotateTowards(Vector3.up, rotateSpeed);
+            RotateTowards(Vector3.up, data.RotateSpeed);
             return;
         }
         
         // rotate towards target
         var dir = targetEnemy.transform.position - transform.position;
-        RotateTowards(dir.normalized, rotateSpeed);
+        RotateTowards(dir.normalized, data.RotateSpeed);
         
         var angle = Mathf.Atan2(dir.normalized.y, dir.normalized.x) * Mathf.Rad2Deg;
         var angle2 = Mathf.Atan2(transform.up.y, transform.up.x) * Mathf.Rad2Deg;
@@ -83,12 +82,12 @@ public class TowerController : MonoBehaviour {
         FireProjectile(enemy, dir);
 
         // reset attack speed
-        _attackSpeedTimer = attackSpeed;
+        _attackSpeedTimer = data.AttackSpeed;
     }
 
     private void FireProjectile(EnemyController enemy, Vector3 dir) {
         var projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
-        projectile.Setup(enemy, dir, projectileDamage, projectileSpeed);
+        projectile.Setup(enemy, dir, data.ProjectileDamage, data.ProjectileSpeed);
     }
 
     public Sprite GetSprite() {
